@@ -46,7 +46,8 @@ class UrlController {
 		}
 
 		try {
-			const shortId = randomUUID();
+			// Get the first 8 digits from the uuid to make it short id
+			const shortId = randomUUID().replace(/-/g, "").slice(0, 8);
 			const baseUrl =
 				process.env.NODE_ENV === "production"
 					? process.env.HOST
