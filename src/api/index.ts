@@ -4,6 +4,8 @@ import bodyParser from "body-parser";
 import compression from "compression";
 import helmet from "helmet";
 import express from "express";
+import swaggerUi from "swagger-ui-express";
+import swaggerJsdoc from "swagger-jsdoc";
 import router from "../routes";
 
 dotenv.config();
@@ -34,6 +36,22 @@ app.use("/", (_req, res, next) => {
 	);
 	next();
 });
+
+// Setup swagger
+const options = {
+	swaggerDefinition: {
+		info: {
+			title: "URL Shortener Service",
+			version: "1.0.0",
+			description: "A service for shortening URLs",
+		},
+		basePath: "/",
+	},
+	apis: ["./swagger.yaml"], // Path to your API files
+};
+const specs = swaggerJsdoc(options);
+app.use("/swagger", swaggerUi.serve, swaggerUi.setup(specs));
+
 // Use the router to handle incoming requests
 app.use("/", router);
 

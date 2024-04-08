@@ -1,0 +1,88 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "URL Shortener Service"
+  description: "A service for shortening URLs"
+
+paths:
+  /:
+    get:
+      summary: "Get service information"
+      description: "Retrieve information about the URL shortener service."
+      responses:
+        '200':
+          description: "Successful operation"
+          schema:
+            type: "string"
+            example: "URL shortener service"
+
+  /{shortId}:
+    get:
+      summary: "Get full URL by short ID"
+      description: "Retrieve the full URL corresponding to the provided short ID."
+      parameters:
+        - name: "shortId"
+          in: "path"
+          description: "Short ID of the URL"
+          required: true
+          type: "string"
+      responses:
+        '200':
+          description: "Successful operation"
+          schema:
+            type: "object"
+            properties:
+              originalUrl:
+                type: "string"
+                description: "Original URL corresponding to the short ID"
+              shortUrl:
+                type: "string"
+                description: "Shortened URL"
+                format: "url"
+        '404':
+          description: "URL not found"
+
+  /shorten:
+    post:
+      summary: "Shorten a URL"
+      description: "Shorten a long URL to a unique short ID."
+      parameters:
+        - name: "originalUrl"
+          in: "body"
+          description: "URL to be shortened"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              originalUrl:
+                type: "string"
+                format: "originalUrl"
+      responses:
+        '201':
+          description: "URL successfully shortened"
+          schema:
+            type: "object"
+            properties:
+              originalUrl:
+                type: "string"
+                description: "Original URL"
+              shortUrl:
+                type: "string"
+                description: "Shortened URL"
+                format: "url"
+
+  /{id}:
+    delete:
+      summary: "Delete URL by ID"
+      description: "Delete the URL corresponding to the provided ID."
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the URL"
+          required: true
+          type: "string"
+      responses:
+        '204':
+          description: "URL successfully deleted"
+        '404':
+          description: "URL not found"
