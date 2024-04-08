@@ -54,6 +54,17 @@ class UrlController {
 
 			const shortenedUrl = `${baseUrl}/${shortId}`;
 
+			const exists: ShortUrl | null = await prisma.shortUrl.findFirst({
+				where: { originalUrl: originalUrl },
+			});
+
+			if (exists) {
+				return res.json({
+					originalUrl: exists.originalUrl,
+					shortenedUrl: exists.shortenedUrl,
+					shortId: exists.shortId,
+				});
+			}
 			await prisma.shortUrl.create({
 				data: {
 					originalUrl: originalUrl,
