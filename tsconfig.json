@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"allowSyntheticDefaultImports": true,
+		"target": "ES6",
+		"module": "commonjs",
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"moduleResolution": "node",
+		"outDir": "dist",
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"noImplicitAny": false
+	},
+	"include": ["prisma/**/*", "public/**/*", "src/**/*", "index.d.ts"],
+	"exclude": ["node_modules"],
+	"ts-node": {
+		"compilerOptions": {
+			"module": "commonjs"
+		}
+	}
+}
