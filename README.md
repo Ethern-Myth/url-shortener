@@ -67,6 +67,7 @@ The URL Shortener Service is a web application designed to shorten long URLs int
 - To test the server locally, uncomment the relevant code block in `src/api/index.ts`.
 - Set the `PORT` environment variable as needed.
 - Run `pnpm dev` to start the server locally.
+- **Swagger will not work on Serverless only for node env according to this setup**
 - **Go to `localhost:PORT/swagger` to access swagger ui**
 
 ### Deployment
