@@ -23,8 +23,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(compression());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-// Middleware function to handle CORS headers
-app.use("/", (_req, res, next) => {
+app.get("/", (_req, res, next) => {
 	res.setHeader("Access-Control-Allow-Origin", "*");
 	res.setHeader(
 		"Access-Control-Allow-Methods",
