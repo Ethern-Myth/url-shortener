@@ -13,6 +13,7 @@ The URL Shortener Service is a web application designed to shorten long URLs int
    - If not already installed, install `pnpm` globally by running `npm install -g pnpm`.
    - Clone the project repository from GitHub.
    - Navigate to the project directory in your terminal.
+   - Make sure you have cloud mongodb connection string to paste in the `env` file
 
 2. **Running the Project:**
    - Run `pnpm install` to install dependencies.
