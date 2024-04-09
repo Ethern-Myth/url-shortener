@@ -16,7 +16,9 @@ The URL Shortener Service is a web application designed to shorten long URLs int
 
 2. **Running the Project:**
    - Run `pnpm install` to install dependencies.
-   - Run `pnpm start` to start the server.
+   - Run `pnpm generate` to activate prisma client
+   - Run `pnpm push` to sync the schema to mongodb
+   - Run `pnpm dev` to start the server. **Read the instructions for local testing setup on this document**
    - The server should now be running and accessible.
    - Swagger documentation can be accessed at `/swagger` endpoint.
 
