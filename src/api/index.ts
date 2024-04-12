@@ -59,13 +59,13 @@ app.use("/", router);
  *  Uncomment the code below for running on node server
  */
 
-// const port = process.env.PORT || 5000;
-// app.listen(port, function () {
-// 	console.log(`Server Started: http://localhost:${port}/`);
-// });
+const port = process.env.PORT || 5000;
+app.listen(port, function () {
+	console.log(`Server Started: http://localhost:${port}/`);
+});
 
 /*
 Exporting the express app is for serverless deploy on Vercel
 Enable the part above for deployment on AWS, GCC or Azure or any other node environment
 */
-export default app;
+// export default app;
