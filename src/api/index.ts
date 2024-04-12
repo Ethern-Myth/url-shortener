@@ -14,6 +14,7 @@ const app = express();
 /*
     Configurations
 */
+
 app.use(
 	cors({
 		origin: "*",
@@ -23,7 +24,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(compression());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-app.get("/", (_req, res, next) => {
+app.use("/", (_req, res, next) => {
 	res.setHeader("Access-Control-Allow-Origin", "*");
 	res.setHeader(
 		"Access-Control-Allow-Methods",
@@ -54,16 +55,17 @@ app.use("/swagger", swaggerUi.serve, swaggerUi.setup(specs));
 // Use the router to handle incoming requests
 app.use("/", router);
 
-/* Enable this for local testing on your local environment
+/** Enable this for local testing on your local environment
+ *  Uncomment the code below for running on node server
  */
 
-// const port = process.env.PORT || 5000;
-// app.listen(port, function () {
-// 	console.log(`Server Started: http://localhost:${port}/`);
-// });
+const port = process.env.PORT || 5000;
+app.listen(port, function () {
+	console.log(`Server Started: http://localhost:${port}/`);
+});
 
 /*
 Exporting the express app is for serverless deploy on Vercel
 Enable the part above for deployment on AWS, GCC or Azure or any other node environment
 */
-export default app;
+// export default app;
