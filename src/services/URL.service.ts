@@ -18,7 +18,7 @@ import { ShortUrl } from "@prisma/client";
 import { prisma } from "../config/prisma.config";
 import { IUrlService } from "../interfaces/URL.interface";
 import { isValidUrl } from "../utils";
-import { randomUUID } from "node:crypto";
+import { generateShortId } from "../utils/shortId";
 
 class UrlService implements IUrlService {
 	constructor() {}
@@ -39,8 +39,14 @@ class UrlService implements IUrlService {
 		if (!originalUrl || !isValidUrl(originalUrl)) {
 			throw new Error("Invalid URL provided.");
 		}
-		// Get the first 8 digits from the uuid to make it short id
-		const shortId = randomUUID().replace(/-/g, "").slice(0, 8);
+
+		// Use our custom shortId generator with length of 6 as default
+		// It is not safe to shorten a UUID because of their algorithm
+		const shortId = generateShortId();
+		/**
+		 * Implementing a check in the database for the shortId generated is good practice
+		 * I will skip this for the purpose of this url-shortener
+		 */
 		const baseUrl =
 			process.env.NODE_ENV === "production"
 				? process.env.HOST

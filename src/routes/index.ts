@@ -28,6 +28,7 @@ router.get("/", (_req, res) => {
 // router.get("/urls", urlController.urls);
 router.get("/:shortId", urlController.urlById);
 router.post("/shorten", urlController.add);
+// Testing Purposes
 router.delete("/:id", urlController.remove);
 
 export default router;
