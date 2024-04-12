@@ -14,6 +14,7 @@ const app = express();
 /*
     Configurations
 */
+
 app.use(
 	cors({
 		origin: "*",
@@ -54,7 +55,8 @@ app.use("/swagger", swaggerUi.serve, swaggerUi.setup(specs));
 // Use the router to handle incoming requests
 app.use("/", router);
 
-/* Enable this for local testing on your local environment
+/** Enable this for local testing on your local environment
+ *  Uncomment the code below for running on node server
  */
 
 // const port = process.env.PORT || 5000;

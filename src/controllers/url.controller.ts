@@ -1,14 +1,28 @@
-import { prisma } from "../config/prisma.config";
+/**
+ * Summary:
+ *
+ * This TypeScript class, UrlController, defines handlers for various URL-related operations in an Express application.
+ * It includes methods for retrieving all URLs, redirecting to the original URL using the short ID, adding a new URL, and removing a URL by its ID.
+ *
+ * - The urls method retrieves all existing URLs.
+ * - The urlById method redirects to the original URL using the short ID.
+ * - The add method adds a new URL.
+ * - The remove method removes a URL by its ID.
+ *
+ * Prerequisites:
+ * - The class assumes the use of the Express framework for routing and handling HTTP requests.
+ * - It relies on an implementation of the IUrlService interface for URL-related operations.
+ */
+
 import { Request, Response } from "express";
-import { isValidUrl } from "../utils";
 import { ShortUrl } from "@prisma/client";
-import { randomUUID } from "crypto";
+import { urlService } from "../initializers/index.initializer";
 
 class UrlController {
 	// Handler for retrieving all URLs
 	async urls(_req: Request, res: Response) {
 		try {
-			const data = await prisma.shortUrl.findMany({});
+			const data = await urlService.getAllUrls();
 			res.status(200).json(data);
 		} catch (error: any) {
 			res.status(500).json({ message: error.message });
@@ -20,10 +34,7 @@ class UrlController {
 	async urlById(req: Request, res: Response) {
 		const { shortId } = req.params;
 		try {
-			const url: ShortUrl | null = await prisma.shortUrl.findUnique({
-				where: { shortId: shortId },
-			});
-
+			const url: ShortUrl | null = await urlService.getUrlById(shortId);
 			if (url) {
 				return res.redirect(url.originalUrl);
 			} else {
@@ -40,41 +51,9 @@ class UrlController {
 	// Handler for adding a new URL
 	public async add(req: Request, res: Response) {
 		const { originalUrl } = req.body;
-
-		if (!originalUrl || !isValidUrl(originalUrl)) {
-			return res.status(400).json({ error: "Invalid URL provided." });
-		}
-
 		try {
-			// Get the first 8 digits from the uuid to make it short id
-			const shortId = randomUUID().replace(/-/g, "").slice(0, 8);
-			const baseUrl =
-				process.env.NODE_ENV === "production"
-					? process.env.HOST
-					: process.env.LOCAL;
-
-			const shortenedUrl = `${baseUrl}/${shortId}`;
-
-			const exists: ShortUrl | null = await prisma.shortUrl.findFirst({
-				where: { originalUrl: originalUrl },
-			});
-
-			if (exists) {
-				return res.json({
-					originalUrl: exists.originalUrl,
-					shortenedUrl: exists.shortenedUrl,
-					shortId: exists.shortId,
-				});
-			}
-			await prisma.shortUrl.create({
-				data: {
-					originalUrl: originalUrl,
-					shortenedUrl: shortenedUrl,
-					shortId: shortId,
-				},
-			});
-
-			return res.json({ originalUrl, shortenedUrl, shortId });
+			const createdUrl = await urlService.createUrl(originalUrl);
+			res.json(createdUrl);
 		} catch (error) {
 			console.error("Error creating shortened URL:", error);
 			return res
@@ -85,13 +64,9 @@ class UrlController {
 
 	// Handler for removing a URL by its ID
 	public async remove(req: Request, res: Response) {
+		const id = req.params.id;
 		try {
-			const id = req.params.id;
-			const data = await prisma.shortUrl.findUnique({ where: { id: id } });
-			if (!data) {
-				return res.status(400).send("Url does not exist");
-			}
-			await prisma.shortUrl.delete({ where: { id: id } });
+			await urlService.removeUrl(id);
 			res.status(204).json({ result: `Successfully removed ${id}` });
 		} catch (error: any) {
 			res.status(500).json({ message: error.message });
@@ -99,5 +74,4 @@ class UrlController {
 	}
 }
 
-// Creating an instance of the UrlController class to be exported
-export const urlController = new UrlController();
+export default UrlController;

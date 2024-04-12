@@ -17,3 +17,14 @@ export function isValidUrl(url: string): boolean {
 	); // fragment locator
 	return !!pattern.test(url);
 }
+
+// To Avoid REGEX patterns for purpose of not blocking Event loop 
+
+// export function isValidUrl(url: string): boolean {
+//     try {
+//         new URL(url);
+//         return true;
+//     } catch (error) {
+//         return false;
+//     }
+// }
